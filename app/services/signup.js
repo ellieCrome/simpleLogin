@@ -1,6 +1,5 @@
 'use strict';
 var User = require('../models/user'); // get the mongoose model
-
 var signupService = {};
 
 signupService.signupHandler = function(req, res) {
@@ -16,9 +15,7 @@ signupService.signupHandler = function(req, res) {
         }, function(error) {
             res.json(error);
         });
-
     }
-
 };
 
 signupService.createUser = function(name, password) {
