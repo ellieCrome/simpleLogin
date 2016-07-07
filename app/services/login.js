@@ -3,9 +3,9 @@ var User = require('../models/user');
 var jwt = require('jwt-simple');
 var config = require('../config/database');
 var passport = require('passport');
-var authenticateService = {};
+var loginService = {};
 
-authenticateService.authenticateHandler = function(req, res) {
+loginService.login = function(req, res) {
     var name = req.query.name;
     var password = req.query.password;
 
@@ -31,7 +31,7 @@ authenticateService.authenticateHandler = function(req, res) {
     });
 };
 
-authenticateService.genToken = function(user, secret) {
+loginService.genToken = function(user, secret) {
     var expires = authenticateService.expiresIn(1); // 1 day
     var token = jwt.encode({
         user: user
@@ -44,10 +44,10 @@ authenticateService.genToken = function(user, secret) {
     };
 }
 
-authenticateService.expiresIn = function(numDays) {
+loginService.expiresIn = function(numDays) {
     var dateObj = new Date();
     return dateObj.setDate(dateObj.getDate() + numDays);
 }
 
 
-module.exports = authenticateService;
+module.exports = loginService;

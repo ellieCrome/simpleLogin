@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var authenticateService = require('../services/authenticate.js');
+var loginService = require('../services/login.js');
 
 // GET method route for projects
-router.get('/', authenticateService.authenticateHandler);
+router.get('/', loginService.login);
 
 module.exports = router;

@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var config = require('./app/config/database');
-var authenticate = require('./app/services/authenticate.js');
+var login = require('./app/services/login.js');
 var session = require('client-sessions');
 var port = process.env.PORT || 8080;
 
@@ -28,7 +28,7 @@ require('./app/config/passport')(passport);
 
 //Routes
 app.use('/signup', require('./app/routes/signup.js'));
-app.use('/authenticate', require('./app/routes/authenticate.js'), passport.authenticate('local', { session: false }));
+app.use('/login', require('./app/routes/login.js'), passport.authenticate('local', { session: false }));
 app.use('/memberinfo', require('./app/routes/memberinfo.js'), passport.authenticate('local', { session: false }));
 
 //Logout
