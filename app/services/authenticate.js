@@ -1,7 +1,8 @@
 'use strict';
-var User = require('../models/user'); // get the mongoose model
+var User = require('../models/user');
 var jwt = require('jwt-simple');
-var config = require('../config/database'); // get db config file
+var config = require('../config/database');
+var passport = require('passport');
 var authenticateService = {};
 
 authenticateService.authenticateHandler = function(req, res) {
@@ -16,13 +17,12 @@ authenticateService.authenticateHandler = function(req, res) {
         if (!user) {
             res.send({ message: 'Authentication failed. User not found.' });
         } else {
-            // check if password matches
             user.comparePassword(password, function(err, isMatch) {
                 if (isMatch && !err) {
-                    // if user is found and password is right create a token
                     var token = authenticateService.genToken(user, config.secret);
-                    // return the information including token as JSON
-                    res.json({ success: true, token: 'JWT ' + token });
+
+                    req.session = token;
+                    res.redirect('/memberInfo')
                 } else {
                     res.send({ message: 'Authentication failed. Wrong password.' });
                 }
@@ -34,7 +34,7 @@ authenticateService.authenticateHandler = function(req, res) {
 authenticateService.genToken = function(user, secret) {
     var expires = authenticateService.expiresIn(1); // 1 day
     var token = jwt.encode({
-        exp: expires
+        user: user
     }, secret);
 
     return {

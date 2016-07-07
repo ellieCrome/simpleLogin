@@ -1,41 +1,31 @@
 'use strict';
-var User = require('../models/user'); // get the mongoose model
+var User = require('../models/user');
+var jwt = require('jwt-simple');
+var config = require('./../config/database.js');
+
 var memberInfoService = {};
 
 memberInfoService.memberInfoHandler = function(req, res) {
 
-    //apiRoutes.get('/memberinfo', passport.authenticate('jwt', { session: false }), function(req, res) {
-        var token = getToken(req.headers);
-        if (token) {
-            var decoded = jwt.decode(token, config.secret);
-            User.findOne({
-                name: decoded.name
-            }, function(err, user) {
-                if (err) throw err;
+    if (req.session && req.session.token) {
+        var token = req.session.token;
+        var decoded = jwt.decode(token, config.secret);
 
-                if (!user) {
-                    return res.status(403).send({ success: false, msg: 'Authentication failed. User not found.' });
-                } else {
-                    res.json({ success: true, msg: 'Welcome in the member area ' + user.name + '!' });
-                }
-            });
-        } else {
-            return res.status(403).send({ success: false, msg: 'No token provided.' });
-        }
-   // });
-};
+        User.findOne({
+            name: decoded.user.name
+        }, function(err, user) {
+            if (err) throw err;
 
-memberInfoService.getToken = function(headers) {
-    if (headers && headers.authorization) {
-        var parted = headers.authorization.split(' ');
-        if (parted.length === 2) {
-            return parted[1];
-        } else {
-            return null;
-        }
+            if (!user) {
+                return res.status(403).send({ messge: 'Authentication failed. User not found.' });
+            } else {
+                res.json({ message: 'Welcome in the member area ' + user.name + '!' });
+            }
+        });
     } else {
-        return null;
+        return res.status(403).send({ message: 'No token provided.' });
     }
+
 };
 
 

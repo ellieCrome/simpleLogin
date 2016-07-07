@@ -3,33 +3,40 @@ var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
-var config = require('./app/config/database'); // get db config file
-var authenticate =  require('app/services/authenticate.js')
-// var User        = require('./app/models/user'); // get the mongoose model
+var config = require('./app/config/database');
+var authenticate = require('./app/services/authenticate.js');
+var session = require('client-sessions');
 var port = process.env.PORT || 8080;
-var jwt = require('jwt-simple');
 
-// get our request parameters
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-// Use the passport package in our application
 app.use(passport.initialize());
 
-// demo Route (GET http://localhost:8080)
-app.get('/', function(req, res) {
-    res.send('Hello! The API is at http://localhost:' + port + '/api');
-});
+//Set up session
+app.use(session({
+  cookieName: 'session',
+  secret: config.secret,
+  duration: 30 * 60 * 1000, //30 mins
+  activeDuration: 5 * 60 * 1000, //5 mins
+}));
 
-// connect to database
+//Connect to the database
 mongoose.connect(config.database);
 
-// pass passport for configuration
+//Pass passport for configuration
 require('./app/config/passport')(passport);
 
+//Routes
 app.use('/signup', require('./app/routes/signup.js'));
-app.use('/authenticate', require('./app/routes/authenticate.js'));
-app.use('/memberinfo', passport.authenticate('jwt', { session: false }), require('./app/routes/memberinfo.js'));
+app.use('/authenticate', require('./app/routes/authenticate.js'), passport.authenticate('local', { session: false }));
+app.use('/memberinfo', require('./app/routes/memberinfo.js'), passport.authenticate('local', { session: false }));
 
-// Start the server
+//Logout
+app.get('/logout', function(req, res) {
+  req.session.reset();
+  res.redirect('/');
+});
+
+//Start the server
 app.listen(port);
+console.log("Server started on port " + port);
