@@ -19,7 +19,7 @@ loginService.login = function(req, res) {
         } else {
             user.comparePassword(password, function(err, isMatch) {
                 if (isMatch && !err) {
-                    var token = authenticateService.genToken(user, config.secret);
+                    var token = loginService.genToken(user, config.secret);
 
                     req.session = token;
                     res.redirect('/memberInfo')
@@ -32,7 +32,7 @@ loginService.login = function(req, res) {
 };
 
 loginService.genToken = function(user, secret) {
-    var expires = authenticateService.expiresIn(1); // 1 day
+    var expires = loginService.expiresIn(1); // 1 day
     var token = jwt.encode({
         user: user
     }, secret);
