@@ -3,14 +3,14 @@ var User = require('../models/user'); // get the mongoose model
 var signupService = {};
 
 signupService.signupHandler = function(req, res) {
-    var name = req.query.name;
+    var username = req.query.username;
     var password = req.query.password;
 
-    if (!name || !password) {
+    if (!username || !password) {
         var error = { message: "Please pass name and password." };
         res.json(error);
     } else {
-        signupService.createUser(name, password).then(function(success) {
+        signupService.createUser(username, password).then(function(success) {
             res.send(success);
         }, function(error) {
             res.json(error);
@@ -18,11 +18,11 @@ signupService.signupHandler = function(req, res) {
     }
 };
 
-signupService.createUser = function(name, password) {
+signupService.createUser = function(username, password) {
 
     return new Promise(function(resolve, reject) {
         var userDetails = {
-            name: name,
+            username: username,
             password: password
         }
 

@@ -19,7 +19,7 @@ memberInfoService.memberInfoHandler = function(req, res) {
             if (!user) {
                 return res.status(403).send({ messge: 'Authentication failed. User not found.' });
             } else {
-                res.json({ message: 'Welcome in the member area ' + user.name + '!' });
+                res.json({ message: 'Welcome in the member area ' + user.username + '!' });
             }
         });
     } else {

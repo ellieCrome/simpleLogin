@@ -6,11 +6,11 @@ var passport = require('passport');
 var loginService = {};
 
 loginService.login = function(req, res) {
-    var name = req.query.name;
+    var username = req.query.username;
     var password = req.query.password;
 
     User.findOne({
-        name: name
+        username: username
     }, function(err, user) {
         if (err) throw err;
 

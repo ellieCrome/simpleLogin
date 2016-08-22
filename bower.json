@@ -1,0 +1,14 @@
+{
+  "name": "simplelogin",
+  "description": "",
+  "main": "server/server.js",
+  "authors": [
+    "Ellie Crome <ecrome@andigital.com>"
+  ],
+  "dependencies": {
+    "angular": "1.5.5",
+    "angular-route": "1.5.5",
+    "q": "^2.0.2",
+    "angular-filter": "^0.5.9"
+  }
+}

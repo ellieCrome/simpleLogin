@@ -1,0 +1,16 @@
+<view title="Please sign in">
+    <content class="padding">
+        <div class="list">
+            <label class="item item-input">
+                <input type="text" placeholder="Username" ng-model="user.username">
+            </label>
+            <label class="item item-input">
+                <input type="password" placeholder="Password" ng-model="user.password">
+            </label>
+        </div>
+        <button ng-controller="LoginCtrl" class="button button-full button-balanced" ng-click="login()">
+            Login
+        </button>
+        <button class="button button-positive button-clear button-full" ui-sref="outside.register">Register now!</button>
+    </content>
+</view>
