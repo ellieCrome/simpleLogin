@@ -1,5 +1,3 @@
-var app = angular.module('simpleLogin');
-
 app.controller('LoginCtrl', function($scope, LoginService, $state) {
     $scope.user = {
         username: '',

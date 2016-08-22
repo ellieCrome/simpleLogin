@@ -7,7 +7,7 @@ signupService.signupHandler = function(req, res) {
     var password = req.query.password;
 
     if (!username || !password) {
-        var error = { message: "Please pass name and password." };
+        var error = { message: "Please pass username and password." };
         res.json(error);
     } else {
         signupService.createUser(username, password).then(function(success) {
@@ -31,7 +31,7 @@ signupService.createUser = function(username, password) {
         // save the user
         newUser.save(function(err) {
             if (err) {
-                reject({ message: "Username already exists." });
+                reject({ message: "Username already exists." , err});
             } else {
                 resolve({
                     message: "Successfully created new user.",
